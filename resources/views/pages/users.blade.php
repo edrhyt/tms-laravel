@@ -34,11 +34,11 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Admin Admin</td>
+                                    <td>Edi Ruhiat</td>
                                     <td>
-                                        <a href="mailto:admin@argon.com">admin@argon.com</a>
+                                        <a href="mailto:admin@tms.dev">admin@tms.dev</a>
                                     </td>
-                                    <td>12/02/2020 11:00</td>
+                                    <td>15/03/2023 11:23</td>
                                     <td class="text-right">
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
