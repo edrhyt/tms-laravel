@@ -14,7 +14,7 @@ class CreateOrderLettersTable extends Migration
     public function up()
     {
         Schema::create('order_letters', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
+            $table->bigIncrements('id')->unsigned();
             $table->string('number', 15)->unique();
             $table->bigInteger('province_id')->unsigned();
             $table->bigInteger('regency_id')->unsigned();
@@ -40,7 +40,7 @@ class CreateOrderLettersTable extends Migration
             $table->date('due_date')->nullable();
             $table->string('phone')->nullable();
             
-            $table->primary('id');
+             
             $table->foreign('province_id')->references('id')->on('provinces')->onDelete('cascade');
             $table->foreign('regency_id')->references('id')->on('regencies')->onDelete('cascade');
             $table->foreign('subdistrict_id')->references('id')->on('subdistricts')->onDelete('cascade');

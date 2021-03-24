@@ -14,12 +14,12 @@ class CreateOutgoingProductsTable extends Migration
     public function up()
     {
         Schema::create('outgoing_products', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
+            $table->bigIncrements('id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
             $table->integer('quantity')->unsigned();
             $table->date('outgoing_at');
 
-            $table->primary('id');
+             
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }

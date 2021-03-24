@@ -14,11 +14,11 @@ class CreateRegenciesTable extends Migration
     public function up()
     {
         Schema::create('regencies', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
+            $table->bigIncrements('id')->unsigned();
             $table->bigInteger('province_id')->unsigned();
             $table->string('name');
 
-            $table->primary('id');
+             
             $table->foreign('province_id')->references('id')->on('provinces')->onDelete('cascade');
         });
     }

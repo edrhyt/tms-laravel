@@ -14,7 +14,7 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
+            $table->bigIncrements('id')->unsigned();
             $table->bigInteger('brand_id')->unsigned();
             $table->bigInteger('unit_id')->unsigned();
             $table->string('name');
@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->boolean('ready');
             $table->integer('price');
 
-            $table->primary('id');
+             
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
             $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
         });

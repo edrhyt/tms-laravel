@@ -14,11 +14,11 @@ class CreateSubdistrictsTable extends Migration
     public function up()
     {
         Schema::create('subdistricts', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
+            $table->bigIncrements('id')->unsigned();
             $table->bigInteger('regency_id')->unsigned();
             $table->string('name');
 
-            $table->primary('id');
+             
             $table->foreign('regency_id')->references('id')->on('regencies')->onDelete('cascade');
         });
     }

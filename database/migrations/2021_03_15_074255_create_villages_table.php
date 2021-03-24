@@ -14,11 +14,11 @@ class CreateVillagesTable extends Migration
     public function up()
     {
         Schema::create('villages', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
+            $table->bigIncrements('id')->unsigned();
             $table->bigInteger('subdistrict_id')->unsigned();
             $table->string('name');
 
-            $table->primary('id');
+             
             $table->foreign('subdistrict_id')->references('id')->on('subdistricts')->onDelete('cascade');
         });
     }
