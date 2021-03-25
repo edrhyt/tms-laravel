@@ -176,7 +176,10 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // Argon
-        LaravelFrontendPresets\ArgonPreset\ArgonPresetServiceProvider::class
+        LaravelFrontendPresets\ArgonPreset\ArgonPresetServiceProvider::class,
+
+        // Yajra
+        Yajra\DataTables\DataTablesServiceProvider::class,
 
     ],
 
