@@ -21,7 +21,16 @@ class EmployeeDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'employee.action');
+            ->editColumn('action', function ($employee) {
+                return '<a href="#edit-'.$employee->id.'" class="bt-action edit">Edit</a> | <a href="#delete-'.$employee->id.'" class="bt-action delete">Delete</a>';
+            })
+            ->editColumn('first_name', function($employee) {
+                return $employee->first_name .' '. $employee->last_name;
+            })
+            ->editColumn('active', function($employee) {
+                if($employee->active == '1') return 'Yes';
+                return 'No';
+            });
     }
 
     /**
@@ -57,27 +66,14 @@ class EmployeeDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('division_id'),
-            Column::make('position_id'),
-            Column::make('employee_identity_number'),
-            Column::make('first_name'),
-            Column::make('last_name'),
-            Column::make('email'),
-            Column::make('address'),
-            Column::make('place_of_birth'),
-            Column::make('date_of_birth'),
-            Column::make('identity_card_number'),
-            Column::make('phone_number'),
-            Column::make('active'),
-            Column::make('image'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            'image',
+            'employee_identity_number',
+            ['name' => 'first_name', 'title' => 'Name', 'data' => 'first_name'],
+            'email',
+            'address',
+            'phone_number',
+            'active',
+            'action'
         ];
     }
 

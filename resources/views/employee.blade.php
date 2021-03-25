@@ -20,6 +20,7 @@
         <!-- Argon CSS -->
         <link type="text/css" href="{{ asset('assets') }}/css/datatables.min.css" rel="stylesheet">
         <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
+        <link type="text/css" href="{{ asset('css') }}/custom.css" rel="stylesheet">
     </head>
 <body>
     <div class="container-fluid">
