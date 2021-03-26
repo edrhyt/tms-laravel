@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EmployeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +25,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
+	// OOTB
+	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
@@ -34,6 +35,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('icons', function () {return view('pages.icons');})->name('icons'); 
 	Route::get('table-list', function () {return view('pages.tables');})->name('table');
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
-});
+	Route::get('tables', function() {return view('pages.tables');});
 
-Route::get('/employee',[EmployeeController::class, 'index']);
+	// Employee
+	Route::get('kepegawaian', ['as' => 'employee', 'uses' => 'App\Http\Controllers\EmployeeController@index']);
+	Route::get('kepegawaian/tambah', ['as' => 'employee.create', 'uses' => 'App\Http\Controllers\EmployeeController@create']);
+	Route::get('kepegawaian/edit/{id}', ['as' => 'employee.edit', 'uses' => 'App\Http\Controllers\EmployeeController@edit']);
+
+	Route::post('kepegawaian', ['as' => 'employee.store', 'uses' => 'App\Http\Controllers\EmployeeController@store']);
+
+
+	// Dump
+});

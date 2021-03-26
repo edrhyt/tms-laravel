@@ -1,9 +1,37 @@
-.bt-action.edit {
-    background-color: transparent;
-    color: royalblue;
+.bt-action {
+    &.edit {
+        background-color: transparent;
+        color: royalblue;
+    }
+    &.delete {
+        background-color: transparent;
+        color: red;
+    }
 }
 
-.bt-action.delete {
-    background-color: transparent;
-    color: red;
+.container-light {
+    position: relative;
+    padding: 1.5rem;
+    background-color: #fefefe;
+    border-radius: 8px;
+    box-shadow: 0px 5px 15px -1px rgba($color: #000000, $alpha: 0.065);
+    max-width: 100%;
+
+    .dataTables_filter {
+        text-align: right;
+    }
+
+    .dataTables_wrapper {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+
+        .row:nth-child(2) {
+            overflow-x: auto;
+        }
+    }
+
+    .pagination {
+        justify-content: flex-end;
+    }
 }

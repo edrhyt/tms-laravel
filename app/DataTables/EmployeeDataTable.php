@@ -28,8 +28,8 @@ class EmployeeDataTable extends DataTable
                 return $employee->first_name .' '. $employee->last_name;
             })
             ->editColumn('active', function($employee) {
-                if($employee->active == '1') return 'Yes';
-                return 'No';
+                if($employee->active == '1') return 'Aktif';
+                return 'Tidak Aktif';
             });
     }
 
@@ -66,14 +66,14 @@ class EmployeeDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'image',
-            'employee_identity_number',
-            ['name' => 'first_name', 'title' => 'Name', 'data' => 'first_name'],
+            ['name' => 'image', 'title' => 'Foto', 'data' => 'image'],
+            ['name' => 'employee_identity_number', 'title' => 'NIK', 'data' => 'employee_identity_number'],
+            ['name' => 'first_name', 'title' => 'Nama', 'data' => 'first_name'],
             'email',
-            'address',
-            'phone_number',
-            'active',
-            'action'
+            ['name' => 'address', 'title' => 'Alamat', 'data' => 'address'],
+            ['name' => 'phone_number', 'title' => 'Telepon', 'data' => 'phone_number'],
+            ['name' => 'active', 'title' => 'Status', 'data' => 'active'],
+            ['name' => 'action', 'title' => 'Aksi', 'data' => 'action']
         ];
     }
 
