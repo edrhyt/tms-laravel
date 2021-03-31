@@ -34,4 +34,26 @@
     .pagination {
         justify-content: flex-end;
     }
+
+    .thumb-container {
+        max-width: 180px;
+        max-height: 180px;
+        overflow: hidden;
+    }
+
+    .sm-thumb-container {
+        padding: 3px solid rgb(201, 201, 201);
+        max-width: 50px;
+        max-height: 50px;
+        border-radius: 50px;
+        overflow: hidden;
+    }
+
+    .thumb-img {
+        max-width: 180px;
+    }
+
+    .sm-thumb {
+        max-width: 50px;
+    }
 }

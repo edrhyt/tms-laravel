@@ -83,7 +83,7 @@
 
                 {{-- Nav Penjualan --}}
                 <x-colsidemenu icon="balance-scale" :parent="['id' => 'penjualan', 'name' => 'Penjualan']" :childs="array(
-                    ['name' => 'Surat Order', 'route' => 'suratOrder'],
+                    ['name' => 'Surat Order', 'route' => 'penjualan/surat-order'],
                     ['name' => 'Survey', 'route' => 'survey'],
                     ['name' => 'Delivery', 'route' => 'delivery']
                     )" />
@@ -97,9 +97,9 @@
 
                 {{-- Nav Inventory --}}
                 <x-colsidemenu icon="boxes" :parent="['id' => 'inventory', 'name' => 'Inventory']" :childs="array(
-                    ['name' => 'Data Barang', 'route' => 'dataBarang'],
-                    ['name' => 'Barang Masuk', 'route' => 'barangMasuk'],
-                    ['name' => 'Barang Keluar', 'route' => 'barangKeluar']
+                    ['name' => 'Data Barang', 'route' => 'inventory'],
+                    ['name' => 'Barang Masuk', 'route' => 'inventory/masuk'],
+                    ['name' => 'Barang Keluar', 'route' => 'inventory/keluar']
                     )" />
 
                 {{-- Nav Kepegawaian --}}

@@ -21,8 +21,8 @@ class EmployeeDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('action', function ($employee) {
-                return '<a href="#edit-'.$employee->id.'" class="bt-action edit">Edit</a> | <a href="#delete-'.$employee->id.'" class="bt-action delete">Delete</a>';
+            ->editColumn('id', function ($employee) {
+                return '<a href="kepegawaian/edit/'.$employee->id.'" class="bt-action edit">Edit</a> | <a href="#delete-'.$employee->id.'" class="bt-action delete">Delete</a>';
             })
             ->editColumn('first_name', function($employee) {
                 return $employee->first_name .' '. $employee->last_name;
@@ -30,7 +30,12 @@ class EmployeeDataTable extends DataTable
             ->editColumn('active', function($employee) {
                 if($employee->active == '1') return 'Aktif';
                 return 'Tidak Aktif';
-            });
+            })
+            ->editColumn('image', function($employee) {
+                $img = '<img src="'.asset('images/').'/'.$employee->image.'" alt="avatar" class="sm-thumb">';
+                return '<div class="sm-thumb-container">'.$img.'</div>';
+            })
+            ->rawColumns(['image', 'id']);
     }
 
     /**
@@ -73,7 +78,7 @@ class EmployeeDataTable extends DataTable
             ['name' => 'address', 'title' => 'Alamat', 'data' => 'address'],
             ['name' => 'phone_number', 'title' => 'Telepon', 'data' => 'phone_number'],
             ['name' => 'active', 'title' => 'Status', 'data' => 'active'],
-            ['name' => 'action', 'title' => 'Aksi', 'data' => 'action']
+            ['name' => 'id', 'title' => 'Aksi', 'data' => 'id']
         ];
     }
 

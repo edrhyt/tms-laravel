@@ -35,4 +35,26 @@
   justify-content: flex-end;
 }
 
+.container-light .thumb-container {
+  max-width: 180px;
+  max-height: 180px;
+  overflow: hidden;
+}
+
+.container-light .sm-thumb-container {
+  padding: 3px solid #c9c9c9;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.container-light .thumb-img {
+  max-width: 180px;
+}
+
+.container-light .sm-thumb {
+  max-width: 50px;
+}
+
 

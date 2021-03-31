@@ -9,7 +9,7 @@
         <ul class="nav nav-sm flex-column">
             @foreach ($childs as $child)
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ $child['route'] }}">
                         {{ $child['name'] }}
                     </a>
                 </li>

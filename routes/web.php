@@ -40,9 +40,23 @@ Route::group(['middleware' => 'auth'], function () {
 	// Employee
 	Route::get('kepegawaian', ['as' => 'employee', 'uses' => 'App\Http\Controllers\EmployeeController@index']);
 	Route::get('kepegawaian/tambah', ['as' => 'employee.create', 'uses' => 'App\Http\Controllers\EmployeeController@create']);
-	Route::get('kepegawaian/edit/{id}', ['as' => 'employee.edit', 'uses' => 'App\Http\Controllers\EmployeeController@edit']);
+	Route::get('kepegawaian/edit/{employee}', ['as' => 'employee.edit', 'uses' => 'App\Http\Controllers\EmployeeController@edit']);
 
+	// Employee # POST, PUT, DELETE
 	Route::post('kepegawaian', ['as' => 'employee.store', 'uses' => 'App\Http\Controllers\EmployeeController@store']);
+	Route::put('kepegawaian/update/{employee}', ['as' => 'employee.update', 'uses' => 'App\Http\Controllers\EmployeeController@update']);
+	Route::delete('kepegawaian/delete/{employee}', ['as' => 'employee.delete', 'uses' => 'App\Http\Controllers\EmployeeController@delete']);
+
+	// Product
+	Route::get('inventory', ['as' => 'product', 'uses' => 'App\Http\Controllers\ProductController@index']);
+	Route::get('inventory/tambah', ['as' => 'product.create', 'uses' => 'App\Http\Controllers\ProductController@create']);
+	Route::get('inventory/edit/{product}', ['as' => 'product.edit', 'uses' => 'App\Http\Controllers\ProductController@edit']);
+
+	// Sale
+	Route::get('penjualan/surat-order', ['as' => 'order', 'uses' => 'App\Http\Controllers\OrderLetterController@index']);
+
+	// Sale # POST, PUT, DELETE
+	Route::get('penjualan/surat-order/tambah', ['as' => 'order.create', 'uses' => 'App\Http\Controllers\OrderLetterController@create']);
 
 
 	// Dump
