@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\OrderLetter;
+use App\Models\Regency;
 use App\DataTables\OrderLetterDataTable;
 
 class OrderLetterController extends Controller
@@ -23,6 +24,34 @@ class OrderLetterController extends Controller
     }
 
     public function create() {
-        return view('pages.orders.inputs');
+        $list_angsuran = array(
+            ['value' => '5', 'title' => '5 Bulan'],
+            ['value' => '6', 'title' => '6 Bulan'],
+            ['value' => '7', 'title' => '7 Bulan'],
+            ['value' => '8', 'title' => '8 Bulan'],
+            ['value' => '9', 'title' => '9 Bulan'],
+            ['value' => '10', 'title' => '10 Bulan'],
+        );
+
+        $regencies = Regency::all()->toArray();
+
+        $dropdowns = array(
+            [
+                'slug' => 'hadiah',
+                'title' => 'Hadiah',
+                'script' => '',
+            ],
+            [
+                'slug' => 'diskon-koordinator',
+                'title' => 'Diskon Koordinator',
+                'script' => '',
+            ],
+        );
+
+        return view('pages.orders.inputs', [
+            'list_angsuran' => $list_angsuran,
+            'regencies' => $regencies,
+            'dropdowns' => $dropdowns,
+            ]);
     }
 }
