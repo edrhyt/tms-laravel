@@ -65,7 +65,24 @@
                 </div>
 
                 <div class="form-row">
-                    <x-input.textarea width="col-md-6" slug="address" title="Alamat" :height="9" />
+                    <x-input.textarea
+                      width="col-md-6" 
+                      slug="address" 
+                      title="Alamat" 
+                      :height="9" />
+
+                    <x-container.card 
+                      width="col-md-6" 
+                      slug="cart" 
+                      title="Keranjang" 
+                      :options="$products" />
+
+                    <x-container.cart-modal 
+                      width="col-md-10"
+                      slug="cart"
+                      title="Tambah Barang"
+                      :dataTable="$dataTable" />
+
                 </div>
 
                 <div class="form-row">
@@ -111,10 +128,13 @@
                 </div>
 
                 <div class="form-row">
-                  <x-input.text 
-                  width="col-md-4" 
-                  slug="sales-promotor" 
-                  title="Sales Promotor" />
+                  <x-input.select
+                    width="col-md-4"
+                    slug="sales-promotor"
+                    title="Sales Promotor"
+                    defaultOption="Pilih Sales Promotor"
+                    :isEmployee="true"
+                    :options="$promotors" />
 
                   <x-input.text 
                   width="col-md-4" 

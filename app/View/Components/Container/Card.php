@@ -1,25 +1,24 @@
 <?php
 
-namespace App\View\Components\Input;
+namespace App\View\Components\Container;
 
 use Illuminate\View\Component;
 
-class Select extends Component
+class Card extends Component
 {
-    public $width, $slug, $title, $defaultOption, $options, $isEmployee;
+    public $width, $slug, $title, $options; 
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($width, $slug, $title, $defaultOption, $options, $isEmployee = false)
+    public function __construct($width, $slug, $title, $options = array())
     {
         $this->width = $width;
         $this->slug = $slug;
         $this->title = $title;
-        $this->defaultOption = $defaultOption;
         $this->options = $options;
-        $this->isEmployee = $isEmployee;
     }
 
     /**
@@ -29,6 +28,6 @@ class Select extends Component
      */
     public function render()
     {
-        return view('components.input.select');
+        return view('components.container.card');
     }
 }

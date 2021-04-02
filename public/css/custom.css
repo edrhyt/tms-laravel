@@ -1,3 +1,31 @@
+/* width */
+
+::-webkit-scrollbar {
+  width: 11px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.dataTable {
+  width: 100% !important;
+}
+
 .bt-action.edit {
   background-color: transparent;
   color: royalblue;
