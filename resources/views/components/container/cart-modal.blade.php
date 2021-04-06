@@ -5,7 +5,7 @@
                 <h5 class="modal-title" id="{{$slug}}ModalTitle">{{$title}}</h5>
                 <div>
                     <i class="fas fa-times text-danger cursor-pointer" data-toggle="tooltip" data-placement="top" data-dismiss="modal" title="Keluar"></i>
-                    <i class="fas fa-check text-success ml-3 cursor-pointer" data-toggle="tooltip" data-placement="top" title="Simpan"></i>
+                    <i class="fas fa-check text-success ml-3 cursor-pointer" data-toggle="tooltip" data-placement="top" data-dismiss="modal" title="Simpan" id="save-btn"></i>
                 </div>
             </div>
             <div class="modal-body px-4 py-2">
@@ -24,7 +24,7 @@
                             <div class="card">
                                 <div class="card-body p-0" style="overflow-y: auto; overflow-x: hidden; max-height: 24rem; height: 24rem;">
                                     <ul id="cart-item-list" class="list-group list-group-flush text-xs">
-                                        <li class="list-group-item" id="empty-list">Empty</li>
+                                        <span id="empty-list" class="abs-center text-muted text-lg">Empty</span>
                                     </ul>
                                 </div>
                             </div>
@@ -54,6 +54,10 @@
 
                 addToCartBtns.forEach(btn => {
                     addItem(btn);
+                });
+
+                $('#save-btn').on('click', function () {
+                    saveCart();
                 });
             });
         });

@@ -155,3 +155,11 @@
     </div>
     @include('layouts.footers.auth')
 </div>
+
+@push('js')
+    <script>
+      $('#diskon-dp').on('change keyup', () => {
+        updateTotalPrice();
+      })
+    </script>
+@endpush

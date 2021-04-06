@@ -24,7 +24,7 @@ class CartDataTable extends DataTable
             ->addColumn('action', 'cart.action')
             ->editColumn('id', function($product) {
                 if($product->stock > 0) {
-                    $action = '<i class="fas fa-plus-circle text-success text-lg act-icon cursor-pointer" id="act-'.$product->id.'"></i>';
+                    $action = '<i class="fas fa-plus-circle text-success text-lg act-icon cursor-pointer" id="act-'.$product->id.'" data-toggle="tooltip" data-placement="top" title="Tambah"></i>';
                 } else {
                     $action = '<i class="fas fa-plus-circle text-muted text-lg act-icon" id="act-'.$product->id.'" disabled="disabled"></i>';
                 }

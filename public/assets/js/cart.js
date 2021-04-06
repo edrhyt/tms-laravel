@@ -1,8 +1,3 @@
-//Global Variables
-let itemsCount = 0;
-let subTotalPrice = 0;
-
-
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -64,9 +59,10 @@ function addItem(btn) {
                 removeItem($(this).parent(), itemId);
                 updateSubTotalPrice();
                 updateItemsCount();
+                isEmpty();
             });
 
-            //Update subtotal & items count
+            //Re-render
             updateSubTotalPrice();
             updateItemsCount();
         }
@@ -101,4 +97,28 @@ function updateItemsCount() {
 
     $('#items-count').text(newItemsCount);
     itemsCount = newItemsCount;
+}
+
+function isEmpty() {
+    if($('#cart-item-list').children().length < 2) {
+        $('#empty-list').show();
+    }
+}
+
+function saveCart() {
+    let savedCart = `
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <span>Jumlah Barang : </span>
+                <span class="badge badge-primary badge-pill"><strong>${itemsCount}</strong></span>
+            </li>
+            <li class="list-group-item">
+                <span>Subtotal Keranjang : </span>
+                <span><strong>Rp. ${numberWithCommas(subTotalPrice)}</strong></span>
+            <li>
+        </ul>
+    `;
+
+    $('#saved-cart-item-list').html(savedCart);
+    updateTotalPrice();
 }
