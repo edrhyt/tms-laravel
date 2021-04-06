@@ -23,7 +23,12 @@ class CartDataTable extends DataTable
             ->eloquent($query)
             ->addColumn('action', 'cart.action')
             ->editColumn('id', function($product) {
-                return '<i class="fas fa-plus-circle text-success text-lg" style="cursor: pointer;"></i>';
+                if($product->stock > 0) {
+                    $action = '<i class="fas fa-plus-circle text-success text-lg act-icon cursor-pointer" id="act-'.$product->id.'"></i>';
+                } else {
+                    $action = '<i class="fas fa-plus-circle text-muted text-lg act-icon" id="act-'.$product->id.'" disabled="disabled"></i>';
+                }
+                return $action;
             })
             ->rawColumns(['id']);
     }
