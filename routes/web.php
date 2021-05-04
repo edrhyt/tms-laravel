@@ -25,6 +25,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
+
 	// OOTB
 	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
@@ -54,9 +55,13 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Sale
 	Route::get('penjualan/surat-order', ['as' => 'order', 'uses' => 'App\Http\Controllers\OrderLetterController@index']);
-
-	// Sale # POST, PUT, DELETE
+	Route::get('penjualan/surat-order/{order}', ['as' => 'order.view', 'uses' => 'App\Http\Controllers\OrderLetterController@view']);
 	Route::get('penjualan/surat-order/tambah', ['as' => 'order.create', 'uses' => 'App\Http\Controllers\OrderLetterController@create']);
+	Route::get('penjualan/surat-order/tambah/kecamatan/{regency}', ['as' => 'order.kecamatan', 'uses' => 'App\Http\Controllers\OrderLetterController@getKecamatan']);
+	Route::get('penjualan/surat-order/tambah/desa/{subdistrict}', ['as' => 'order.desa', 'uses' => 'App\Http\Controllers\OrderLetterController@getDesa']);
+	
+	// Sale # POST, PUT, DELETE
+	Route::post('penjualan/surat-order/tambah', ['as' => 'order.store', 'uses' => 'App\Http\Controllers\OrderLetterController@store']);
 
 
 	// Dump

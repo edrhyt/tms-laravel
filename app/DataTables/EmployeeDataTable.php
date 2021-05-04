@@ -22,7 +22,11 @@ class EmployeeDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->editColumn('id', function ($employee) {
-                return '<a href="kepegawaian/edit/'.$employee->id.'" class="bt-action edit">Edit</a> | <a href="#delete-'.$employee->id.'" class="bt-action delete">Delete</a>';
+                return '
+                    <div class="d-flex">
+                        <i class="fas fa-edit text-primary mr-2 cursor-pointer text-lg" id="edit-'.$employee->id.'" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                        <i class="fas fa-trash-alt text-danger ml-2 cursor-pointer text-lg" id="delete-'.$employee->id.'" data-toggle="tooltip" data-placement="top" title="Hapus"></i>
+                    </div>';
             })
             ->editColumn('first_name', function($employee) {
                 return $employee->first_name .' '. $employee->last_name;

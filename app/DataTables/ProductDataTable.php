@@ -21,7 +21,26 @@ class ProductDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'product.action');
+            ->addColumn('action', 'product.action')
+            ->editColumn('id', function($product) {
+                return '
+                    <div class="d-flex">
+                        <i class="fas fa-edit text-primary mr-2 cursor-pointer text-lg" id="edit-'.$product->id.'" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                        <i class="fas fa-trash-alt text-danger ml-2 cursor-pointer text-lg" id="delete-'.$product->id.'" data-toggle="tooltip" data-placement="top" title="Hapus"></i>
+                    </div>';
+            })
+            ->editColumn('price', function($product){
+                return 'Rp. '.numberWithCommas( $product->price );
+            })
+            ->editColumn('stock', function($product){
+                if($product->stock > 0) {
+                    $color = 'primary';
+                } else {
+                    $color = 'danger';
+                }
+                return '<span class="badge badge-'.$color.' badge-pill"><strong style="font-size: 12px;">'.$product->stock.'</strong></span>';
+            })
+            ->rawColumns(['id', 'stock']);
     }
 
     /**
@@ -57,11 +76,9 @@ class ProductDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['name' => 'id', 'title' => 'id', 'data' => 'id'],
-            ['name' => 'brand_id', 'title' => 'brand_id', 'data' => 'brand_id'],
             ['name' => 'name', 'title' => 'Nama', 'data' => 'name'],
             ['name' => 'stock', 'title' => 'stock', 'data' => 'stock'],
-            ['name' => 'ready', 'title' => 'Status', 'data' => 'ready'],
+            ['name' => 'price', 'title' => 'Harga', 'data' => 'price'],
             ['name' => 'id', 'title' => 'Aksi', 'data' => 'id']
         ];
     }

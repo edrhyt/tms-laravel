@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\OrderLetter;
+use App\Models\Regency;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -21,7 +22,29 @@ class OrderLetterDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'orderletter.action');
+            ->addIndexColumn()
+            ->addColumn('action', 'orderletter.action')
+            ->editColumn('regency_id', function ($orderLetter) {
+                return Regency::find($orderLetter->regency_id)->name;
+            })
+            ->editColumn('id', function ($orderLetter) {
+                return '
+                    <div class="d-flex">
+                        <div class="dropdown show">
+                            <a class="btn btn-dark dropdown-toggle bt-small" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-cogs"></i>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="'.route('order.view', $orderLetter->id).'"><i class="fas fa-eye"></i>Pilih Surat Order</a> <a class="dropdown-item" href="#"><i class="far fa-edit"></i>Ubah</a>
+                                <hr class="m-2">
+                                <a class="dropdown-item text-danger" href="#"><i class="far fa-trash-alt"></i>Hapus</a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary bt-small"><i class="far fa-file"></i> Buat Survey</button>
+                    </div>';
+            })
+            ->rawColumns(['id']);
     }
 
     /**
@@ -57,15 +80,11 @@ class OrderLetterDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            ['name' => 'number', 'title' => 'Kode SO', 'data' => 'number'],
+            ['name' => 'coordinator_name', 'title' => 'Nama Koordinator', 'data' => 'coordinator_name'],
+            ['name' => 'regency_id', 'title' => 'Alamat', 'data' => 'regency_id'],
+            ['name' => 'date', 'title' => 'Tgl SO', 'data' => 'date'],
+            ['name' => 'id', 'title' => 'Aksi', 'data' => 'id']
         ];
     }
 

@@ -1,12 +1,36 @@
 //Global Variables
 let itemsCount = 0;
 let subTotalPrice = 0;
+let totalPrice = 0;
+let diskonDP = parseInt( $('#diskon-dp').val() ) || 0;
 
-function updateTotalPrice() {
-    let totalPrice = 0;
-    let diskonDP = parseInt( $('#diskon-dp').val() ) || 0;
+let diskonKoordinator = parseInt( $('#diskon-koordinator').val() ) || 0;
 
-    totalPrice = subTotalPrice - diskonDP;
+function getNetto () {
+    return totalPrice - diskonDP;
+}
 
-    $('#total').val(totalPrice);
+function getMonthlyInstallments() {
+    const installmentsTime = parseInt($('#installment').val()) || 1;
+    
+    return totalPrice / installmentsTime;
+}
+
+function getFirstInstallment() {
+    return getMonthlyInstallments() - diskonDP;
+}
+
+function resetOrder() {
+    itemsCount = 0;
+    subTotalPrice = 0;
+    totalPrice = 0;
+    diskonDP = parseInt( $('#diskon-dp').val() ) || 0;
+
+    $('#installment').prop('disabled', true);
+    $('#diskon-dp').prop('readonly', true);
+    $('#hadiah').prop('readonly', true);
+
+    $('#netto').val(0);
+    $('#angsuran-1').val(0);
+    $('#angsuran-per-bulan').val(0);
 }

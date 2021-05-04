@@ -26,4 +26,22 @@ class Employee extends Model
         'active',
         'image',
     ];
+
+    public static function getSalesPromotor() {
+        return self::where('position_id', 5)
+                    ->orderBy('first_name')
+                    ->get();
+    }
+
+    public static function getDemoBooker() {
+        return self::where('position_id', 4)
+                    ->orderBy('first_name')
+                    ->get();
+    }
+
+    public static function getSVPSales() {
+        return self::where('position_id', 3)
+                    ->orderBy('first_name')
+                    ->get();
+    }
 }

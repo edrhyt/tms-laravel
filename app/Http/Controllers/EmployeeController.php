@@ -33,6 +33,8 @@ class EmployeeController extends Controller
     }
 
     public function store() {
+
+        // Validasi
         request()->validate([
             'position-id' => 'required',
             'employee-identity-number' => 'required',
@@ -45,12 +47,14 @@ class EmployeeController extends Controller
             'phone-number' => 'required',
         ]);
 
+        // Masukkan posisi
         $divisions = Position::where('id', request('position-id'))->select('division_id')->get();
         foreach($divisions as $d){
             $division = $d->division_id;
         }
         unset($divisions);
 
+        // Store ke database
         Employee::create([
             'division_id' => $division,
             'position_id' => request('position-id'),

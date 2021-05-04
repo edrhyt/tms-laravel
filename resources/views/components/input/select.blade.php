@@ -1,6 +1,6 @@
 <div class="form-group {{$width}}">
     <label class="control-label" for="{{$slug}}">{{$title}}</label>
-    <select class="form-control" name="{{$slug}}" id="{{$slug}}">
+    <select class="form-control" name="{{$slug}}" id="{{$slug}}" {{$disabled ? __('disabled') : ''}}>
         <option value="NULL">{{$defaultOption}}</option>
         @foreach ($options as $option)
             <option value="{{$option['value'] ?? $option['id']}}">

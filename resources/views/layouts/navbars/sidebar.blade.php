@@ -9,6 +9,8 @@
         <a class="navbar-brand p-0 m-0" href="{{ route('home') }}">
             <h4 class="m-0">TUNAS MITRA SEJAHTERA</h4>
         </a>
+        {{-- Clock --}}
+        
         {{-- User --}}
         <ul class="nav align-items-center d-md-none">
             <li class="nav-item dropdown">
@@ -83,7 +85,7 @@
 
                 {{-- Nav Penjualan --}}
                 <x-colsidemenu icon="balance-scale" :parent="['id' => 'penjualan', 'name' => 'Penjualan']" :childs="array(
-                    ['name' => 'Surat Order', 'route' => 'penjualan/surat-order'],
+                    ['name' => 'Surat Order', 'route' => URL::route('order')],
                     ['name' => 'Survey', 'route' => 'survey'],
                     ['name' => 'Delivery', 'route' => 'delivery']
                     )" />
@@ -97,7 +99,7 @@
 
                 {{-- Nav Inventory --}}
                 <x-colsidemenu icon="boxes" :parent="['id' => 'inventory', 'name' => 'Inventory']" :childs="array(
-                    ['name' => 'Data Barang', 'route' => 'inventory'],
+                    ['name' => 'Data Barang', 'route' => URL::route('product')],
                     ['name' => 'Barang Masuk', 'route' => 'inventory/masuk'],
                     ['name' => 'Barang Keluar', 'route' => 'inventory/keluar']
                     )" />

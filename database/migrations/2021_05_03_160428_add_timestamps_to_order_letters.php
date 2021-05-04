@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdatePositionsTable extends Migration
+class AddTimestampsToOrderLetters extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class UpdatePositionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('positions', function (Blueprint $table) {
-            $table->bigInteger('division_id')->unsigned();
-             
-            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
+        Schema::table('order_letters', function (Blueprint $table) {
+            $table->timestamps();
         });
     }
 
@@ -27,6 +25,8 @@ class UpdatePositionsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('order_letters', function (Blueprint $table) {
+            $table->dropColumn(['created_at', 'updated_at']);
+        });
     }
 }

@@ -26,7 +26,7 @@ function addItem(btn) {
 
             //HT to append
             const item = `
-                <li class="list-group-item position-relative">
+                <li class="list-group-item position-relative" id="pr-${itemId}">
                     <div>
                         ${itemName}
                         <div class="d-flex justify-content-between align-items-center mt-2">
@@ -106,6 +106,7 @@ function isEmpty() {
 }
 
 function saveCart() {
+    // Append ke card keranjang
     let savedCart = `
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
@@ -119,6 +120,26 @@ function saveCart() {
         </ul>
     `;
 
+    // Set global variabel $totalPrice
+    totalPrice = subTotalPrice;
+
+    // Update view
+    if (itemsCount > 0) {
+        $('#installment').prop('disabled', false);
+
+        if($('#installment').val() != 'NULL') {
+            $('#diskon-dp').prop('readonly', false);
+            $('#hadiah').prop('readonly', false);
+
+            $('#netto').val(getNetto().toFixed());
+            $('#angsuran-1').val(getFirstInstallment().toFixed());
+            $('#angsuran-per-bulan').val(getMonthlyInstallments().toFixed())
+        }
+    } else {
+        resetOrder();
+    }
+
+    $('#netto').val(getNetto().toFixed());
     $('#saved-cart-item-list').html(savedCart);
-    updateTotalPrice();
+    $('#total-angsuran').val(totalPrice);
 }

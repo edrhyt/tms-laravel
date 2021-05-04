@@ -9,7 +9,7 @@
             @endforeach
         </div>
         </div>
-        <input type="text" class="form-control pl-2" name="{{$options[0]['slug']}}" id="{{$options[0]['slug']}}">
+        <input type="text" class="form-control pl-2" name="{{$options[0]['slug']}}" id="{{$options[0]['slug']}}" {{$disabled ? __('readonly') : ''}}>
     </div>
 </div>    
 
