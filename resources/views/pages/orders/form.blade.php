@@ -4,9 +4,9 @@
           {{-- <x-alert></x-alert> --}}
       @endif
         <form class="form-horizontal" method="POST">
-            @if(false)
-              @method('PUT')
-            @endif
+            @isset($order)
+                @method('PUT')
+            @endisset
 
             @csrf
             <fieldset>
@@ -14,22 +14,23 @@
                   <strong class="text-xl">Tambah Data Surat Order</strong>
                   <div class="col-md-6 d-flex align-items-center justify-content-end pr-0">
                     <input class="form-control input-group-text col-md-3 text-center" style="border-radius: 99px 0 0 99px;" type="text" value="BDG" name="kode-wilayah" id="kode-wilayah" readonly> 
-                    <input class="form-control col-md-6" style="border-radius: 0 99px 99px 0;" type="text" placeholder="No Surat Order" name="no-so" id="no-so" required>
+                    <input class="form-control col-md-6" style="border-radius: 0 99px 99px 0;" type="text" placeholder="No Surat Order" name="no-so" id="no-so" @isset($order) value="{{substr($order->number, 4)}}" @endisset required>
                   </div>
                 </div>
                 <hr class="my-2 mb-3">
                 <div class="form-row">
-                    <x-input.date 
+                   <x-input.date 
                       width="col-md-4" 
                       slug="order-date" 
-                      color="btn-primary"
-                      title="Tanggal Surat Order" />
+                      title="Tanggal Surat Order"
+                      :value="$order->date ?? NULL"
+                      :disabled="isset($order) ? TRUE : FALSE" />
 
                     <x-input.date 
                       width="col-md-4" 
                       slug="survey-date" 
-                      title="Tanggal Survey"
-                      :disabled="true" />
+                      color="btn-primary"
+                      title="Tanggal Survey" />
 
                     <x-input.date 
                       width="col-md-4" 
@@ -42,7 +43,8 @@
                     <x-input.text 
                       width="col-md-12" 
                       slug="coordinator-name" 
-                      title="Nama Koordinator" />
+                      title="Nama Koordinator"
+                      :value="$order->coordinator_name ?? NULL" />
                     
                     <x-input.select
                       width="col-md-4"

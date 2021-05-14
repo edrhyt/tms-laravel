@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+
+    public static function getProductName($id) {
+        $product = self::where('id', $id)
+                    ->orderBy('name')
+                    ->get()
+                    ->first();
+        return $product->name;
+    }
 }

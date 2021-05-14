@@ -9,7 +9,7 @@
 
         <title>{{ config('app.name', 'Argon Dashboard') }}</title>
         <!-- Favicon -->
-        <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
+        <link href="{{ asset('argon') }}/img/brand/tms_logo.png" rel="icon" type="image/png">
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
         <!-- Extra details for Live View on GitHub Pages -->
@@ -43,6 +43,7 @@
         <script src="{{ asset('assets') }}/js/order-letter.js"></script>
         <script src="{{ asset('assets') }}/js/cart.js"></script>
         <script src="{{ asset('assets') }}/js/datatables.min.js"></script>
+        <script src="{{ asset('assets') }}/js/clock.js"></script>
         
         @stack('js')
         

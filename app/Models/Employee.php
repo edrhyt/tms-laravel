@@ -44,4 +44,12 @@ class Employee extends Model
                     ->orderBy('first_name')
                     ->get();
     }
+
+    public static function getEmployeeName($id) {
+        $employee = self::where('id', $id)
+                    ->orderBy('first_name')
+                    ->get()
+                    ->first();
+        return $employee->first_name .' '. $employee->last_name;
+    }
 }

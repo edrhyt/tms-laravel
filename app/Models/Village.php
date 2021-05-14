@@ -13,4 +13,12 @@ class Village extends Model
         return self::where('subdistrict_id', $subdistrict_id)
                     ->orderBy('name') ->get();
     }
+
+    public static function getVillageName($id) {
+        $village = self::where('id', $id)
+                    ->orderBy('name')
+                    ->get()
+                    ->first();
+        return $village->name;
+    }
 }

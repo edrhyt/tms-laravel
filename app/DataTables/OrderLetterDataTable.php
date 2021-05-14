@@ -36,7 +36,7 @@ class OrderLetterDataTable extends DataTable
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="'.route('order.view', $orderLetter->id).'"><i class="fas fa-eye"></i>Pilih Surat Order</a> <a class="dropdown-item" href="#"><i class="far fa-edit"></i>Ubah</a>
+                                <a class="dropdown-item" href="'.route('order.view', $orderLetter->id).'"><i class="fas fa-eye"></i>Pilih Surat Order</a> <a class="dropdown-item" href="'.route('order.edit', $orderLetter->id).'"><i class="far fa-edit"></i>Ubah</a>
                                 <hr class="m-2">
                                 <a class="dropdown-item text-danger" href="#"><i class="far fa-trash-alt"></i>Hapus</a>
                             </div>

@@ -10,7 +10,7 @@
             <h4 class="m-0">TUNAS MITRA SEJAHTERA</h4>
         </a>
         {{-- Clock --}}
-        
+        <div id="clock"></div>
         {{-- User --}}
         <ul class="nav align-items-center d-md-none">
             <li class="nav-item dropdown">
@@ -50,9 +50,10 @@
                 <div class="row">
                     <div class="col-6 collapse-brand">
                         <a href="{{ route('home') }}">
-                            <h4>TUNAS MITRA SEJAHTERA</h4>
+                            <h4>TUNAS MITRA SEJAHTEA</h4>
                         </a>
                     </div>
+                    <div id="clock"></div>
                     <div class="col-6 collapse-close">
                         <button type="button" class="navbar-toggler" data-toggle="collapse"
                             data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false"

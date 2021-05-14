@@ -54,11 +54,30 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('inventory/edit/{product}', ['as' => 'product.edit', 'uses' => 'App\Http\Controllers\ProductController@edit']);
 
 	// Sale
-	Route::get('penjualan/surat-order', ['as' => 'order', 'uses' => 'App\Http\Controllers\OrderLetterController@index']);
-	Route::get('penjualan/surat-order/{order}', ['as' => 'order.view', 'uses' => 'App\Http\Controllers\OrderLetterController@view']);
-	Route::get('penjualan/surat-order/tambah', ['as' => 'order.create', 'uses' => 'App\Http\Controllers\OrderLetterController@create']);
-	Route::get('penjualan/surat-order/tambah/kecamatan/{regency}', ['as' => 'order.kecamatan', 'uses' => 'App\Http\Controllers\OrderLetterController@getKecamatan']);
-	Route::get('penjualan/surat-order/tambah/desa/{subdistrict}', ['as' => 'order.desa', 'uses' => 'App\Http\Controllers\OrderLetterController@getDesa']);
+	Route::get('penjualan/surat-order', [
+		'as' => 'order',
+		'uses' => 'App\Http\Controllers\OrderLetterController@index'
+	]);
+	Route::get('penjualan/surat-order/tambah', [
+		'as' => 'order.create', 
+		'uses' => 'App\Http\Controllers\OrderLetterController@create'
+	]);
+	Route::get('penjualan/surat-order/{order}', [
+		'as' => 'order.view', 
+		'uses' => 'App\Http\Controllers\OrderLetterController@view'
+	]);
+	Route::get('penjualan/surat-order/edit/{order}', [
+		'as' => 'order.edit',
+		'uses' => 'App\Http\Controllers\OrderLetterController@edit'
+	]);
+	Route::get('penjualan/surat-order/tambah/kecamatan/{regency}', [
+		'as' => 'order.kecamatan', 
+		'uses' => 'App\Http\Controllers\OrderLetterController@getKecamatan'
+	]);
+	Route::get('penjualan/surat-order/tambah/desa/{subdistrict}', [
+		'as' => 'order.desa', 
+		'uses' => 'App\Http\Controllers\OrderLetterController@getDesa'
+	]);
 	
 	// Sale # POST, PUT, DELETE
 	Route::post('penjualan/surat-order/tambah', ['as' => 'order.store', 'uses' => 'App\Http\Controllers\OrderLetterController@store']);

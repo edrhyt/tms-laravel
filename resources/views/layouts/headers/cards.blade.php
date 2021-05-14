@@ -24,7 +24,8 @@
             @endif
             @isset($info)
                 <div class="container mb-5 p-0 info">
-                    Lihat Data {{$info}}
+                    <span class="info-dot-white">Lihat Data {{$info}}</span> 
+                    <span class="sub-info-dot-white">Halaman ini berisi Data {{$info}} dengan kode:<strong> {{$order->number}}</strong></span>
                 </div>
             @endisset
         </div>

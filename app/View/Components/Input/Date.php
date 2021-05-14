@@ -6,19 +6,20 @@ use Illuminate\View\Component;
 
 class Date extends Component
 {
-    public $width, $slug, $title, $color, $disabled;
+    public $width, $slug, $title, $color, $disabled, $value;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($width, $slug, $title, $color = '', $disabled = false)
+    public function __construct($width, $slug, $title, $color = '', $disabled = false, $value = NULL)
     {
         $this->width = $width;
         $this->slug = $slug;
         $this->title = $title;
         $this->color = $color;
         $this->disabled = $disabled;
+        $this->value = $value;
     }
 
     /**

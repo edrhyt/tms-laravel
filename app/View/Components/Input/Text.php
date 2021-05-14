@@ -6,18 +6,19 @@ use Illuminate\View\Component;
 
 class Text extends Component
 {
-    public $width, $slug, $title, $disabled;
+    public $width, $slug, $title, $disabled, $value;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($width, $slug, $title, $disabled = false)
+    public function __construct($width, $slug, $title, $disabled = false, $value = NULL)
     {
         $this->width = $width;
         $this->slug = $slug;
         $this->title = $title;
         $this->disabled = $disabled;
+        $this->value = $value;
     }
 
     /**

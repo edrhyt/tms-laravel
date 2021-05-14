@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\OrderLetter;
+use App\Models\OrderLetterProducts;
 use App\Models\Regency;
 use App\Models\Subdistrict;
 use App\Models\Village;
 use App\Models\Employee;
+use App\Models\Product;
 use App\DataTables\OrderLetterDataTable;
 use App\DataTables\CartDataTable;
 
@@ -44,7 +47,34 @@ class OrderLetterController extends Controller
             ]
         );
 
-        return view('pages.orders.view', ['order' => $order, 'breadcrumb' => $breadcrumb, 'info' => 'Surat Order']);
+        // Set nama karyawan dan alamat
+        $order['regency'] = Regency::getRegencyName($order->regency_id);
+        $order['subdistrict'] = Subdistrict::getSubdistrictName($order->subdistrict_id);
+        $order['village'] = Village::getVillageName($order->village_id);
+
+        $order['sp_employee'] = Employee::getEmployeeName($order->sp_employee_id);
+        $order['db_employee'] = Employee::getEmployeeName($order->db_employee_id);
+        $order['ss_employee'] = Employee::getEmployeeName($order->ss_employee_id);
+
+        $order = (object) $order;
+
+        // Set list barang
+        $productList = OrderLetterProducts::where('order_letter_id', $order->id)
+                                            ->orderBy('product_id')
+                                            ->get();
+        foreach($productList as $idx => $product) {
+            $productList[$idx]['product_name'] = Product::getProductName($product->product_id);
+        }
+        $productList = (object) $productList;
+
+        $products = array();        
+        foreach($productList as $idx => $product) {
+            $products[$idx]['title'] = $product->product_name;
+            $products[$idx]['value'][0] = $product->quantity;
+            $products[$idx]['value'][1] = $product->subtotal_price;
+        }
+
+        return view('pages.orders.view', ['order' => $order, 'products' => $products, 'breadcrumb' => $breadcrumb, 'info' => 'Surat Order']);
     }
 
     public function create(CartDataTable $dataTable) {
@@ -68,9 +98,29 @@ class OrderLetterController extends Controller
             ]);
     }
 
-    public function store() {
-        // dd(request());
+    public function edit(CartDataTable $dataTable, OrderLetter $order) {
+        // Options
+        $list_angsuran = self::getListAngsuran();
+        $dropdowns = self::getOpsi();
+        $regencies = Regency::all()->toArray();
 
+        // Data Modeling
+        $promotors = Employee::getSalesPromotor()->toArray(); 
+        $demo_bookers = Employee::getDemoBooker()->toArray(); 
+        $spv_sales = Employee::getSVPSales()->toArray(); 
+
+        return $dataTable->render('pages.orders.inputs', [
+            'list_angsuran' => $list_angsuran,
+            'regencies' => $regencies,
+            'dropdowns' => $dropdowns,
+            'promotors' => $promotors,
+            'demo_bookers' => $demo_bookers,
+            'svp_sales' => $spv_sales,
+            'order' => $order,
+            ]);
+    }
+
+    public function store() {
         // Validasi
         request()->validate([
             'kode-wilayah' => 'required',
@@ -90,32 +140,57 @@ class OrderLetterController extends Controller
             'order-date' => 'required',
         ]);
 
-        // // Pre-proccess no surat order
-        $noSuratOrder = request('kode-wilayah') . request('no-so');
+        
+        // Mulai DB transaksi
+        DB::transaction(function(){
+            // Pre-process no surat order
+            $noSuratOrder = request('kode-wilayah') .'-'. request('no-so');
 
-        // // Store ke database
-        OrderLetter::create([
-            'number' => $noSuratOrder,
-            'province_id' => 32,
-            'regency_id' => request('regency'),
-            'subdistrict_id' => request('subdistrict'),
-            'village_id' => request('village'),
-            'sp_employee_id' => request('sales-promotor'),
-            'db_employee_id' => request('demo-booker'),
-            'ss_employee_id' => request('svp-sales'),
-            'coordinator_name' => request('coordinator-name'),
-            'address' => request('address'),
-            'installments_tenor' => request('installment'),
-            'dp_discount' => request('diskon-dp'),
-            'total' => request('total-angsuran'),
-            'netto' => request('netto'),
-            'first_installment' => request('angsuran-1'),
-            'monthly_installments' => request('angsuran-per-bulan'),
-            'date' => date("Y-m-d", strtotime(request('order-date'))),
-        ]);
+            // Pre-process list barang
+            $requestKeys = request()->except('_token');
+            $listBarang = [];
+
+            foreach($requestKeys as $key => $qty) {
+                if(preg_match("/^qty-([0-9][0-9][0-9]|[0-9][0-9]|[0-9])$/", $key)) {
+                    array_push($listBarang, [
+                        'product-id' => (int) explode("-", $key)[1],
+                        'quantity' => (int) $qty,
+                    ]);
+                }
+            }
+
+            // Insert data baru ke order_letter
+            $orderLetter = OrderLetter::create([
+                'number' => $noSuratOrder,
+                'province_id' => 32,
+                'regency_id' => request('regency'),
+                'subdistrict_id' => request('subdistrict'),
+                'village_id' => request('village'),
+                'sp_employee_id' => request('sales-promotor'),
+                'db_employee_id' => request('demo-booker'),
+                'ss_employee_id' => request('svp-sales'),
+                'coordinator_name' => request('coordinator-name'),
+                'address' => request('address'),
+                'installments_tenor' => request('installment'),
+                'dp_discount' => request('diskon-dp'),
+                'total' => request('total-angsuran'),
+                'netto' => request('netto'),
+                'first_installment' => request('angsuran-1'),
+                'monthly_installments' => request('angsuran-per-bulan'),
+                'date' => date("Y-m-d", strtotime(request('order-date'))),
+            ]);
+    
+            // Insert data baru ke pivot table order_letter_products
+            foreach($listBarang as $barang) {
+                OrderLetterProducts::create([
+                    'order_letter_id' => $orderLetter->id,
+                    'product_id' => $barang['product-id'],
+                    'quantity' => $barang['quantity']
+                ]);
+            }
+        });
+
     }
-
-
 
     protected function getListAngsuran() {
         return array(

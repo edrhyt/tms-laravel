@@ -25,6 +25,13 @@ html {
     scroll-behavior: smooth;
 }
 
+#clock {
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem;
+}
+
 .dataTable {
     width: 100% !important;
     min-height: 300px !important;
@@ -121,4 +128,44 @@ html {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.info-dot-dark {
+    display: flex;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.info-dot-dark::before {
+    content: "";
+    display: inline-flex;
+    align-self: center;
+    width: 20px;
+    height: 5px;
+    border-radius: 5px;
+    background: #555;
+    margin-right: 5px;
+}
+
+.info-dot-white {
+    display: flex;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.info-dot-white::before {
+    content: "";
+    display: inline-flex;
+    align-self: center;
+    width: 20px;
+    height: 5px;
+    border-radius: 5px;
+    background: white;
+    margin-right: 5px;
+}
+
+.sub-info-dot-white {
+    margin-left: 25px;
+    color: rgba($color: #fff, $alpha: 0.75);
 }

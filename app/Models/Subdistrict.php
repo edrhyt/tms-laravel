@@ -14,4 +14,12 @@ class Subdistrict extends Model
                ->orderBy('name')
                ->get();
     }
+
+    public static function getSubdistrictName($id) {
+        $kecamatan = self::where('id', $id)
+                ->orderBy('name')
+                ->get()
+                ->first();
+        return $kecamatan->name;
+    }
 }
