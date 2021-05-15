@@ -26,13 +26,8 @@
                 <td>{{__(': ') . $tableData[$i]['value'] . __(' Kali')}}</td>
               @else
                 @if (gettype( $tableData[$i]['value'] ) == 'array')
-                    @foreach ($tableData[$i]['value'] as $key => $value)
-                      @if ($key === array_key_last($tableData[$i]['value']))
-                        <td>{{__('Rp. ') . number_format($value)}}</td>
-                      @else
-                        <td><span class="badge badge-primary badge-pill" style="font-size: 10px;"><strong>{{$value}}</strong></span></td>
-                      @endif
-                    @endforeach
+                  <td><span class="badge badge-primary badge-pill" style="font-size: 11px;"><strong>{{$tableData[$i]['value']['qty']}}</strong></span></td>
+                  <td>{{__('Rp. ') . number_format($tableData[$i]['value']['subtotal'])}}</td>
                 @else
                   <td>{{__(': ') . $tableData[$i]['value']}}</td>
                 @endif

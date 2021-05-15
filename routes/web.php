@@ -81,6 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	// Sale # POST, PUT, DELETE
 	Route::post('penjualan/surat-order/tambah', ['as' => 'order.store', 'uses' => 'App\Http\Controllers\OrderLetterController@store']);
+	Route::put('penjualan/surat-order/update/{order}', ['as' => 'order.update', 'uses' => 'App\Http\Controllers\OrderLetterController@update']);
 
 
 	// Dump

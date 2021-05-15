@@ -51,6 +51,8 @@
         $('#cart-add-btn').on('click', () => {
             $('document').ready(function () {
                 const addToCartBtns = document.querySelectorAll('.act-icon');
+                
+                if(isEdit && !isCartInitialized) initializeCart();
 
                 addToCartBtns.forEach(btn => {
                     addItem(btn);
@@ -61,5 +63,29 @@
                 });
             });
         });
+
+        function initializeCart() {
+            let productList = [];
+            if(isEdit) {
+                <?php
+                    if(isset($value)) {
+                        foreach($value as $key => $product) {
+                            ?>
+                            productList[<?= $key ?>] = {
+                                "product_id": <?= $product['value']['product_id'] ?>, 
+                                "qty": <?= $product['value']['qty'] ?>
+                            };
+                            <?php
+                        }
+                    }
+                ?>
+    
+                productList.forEach(product => {
+                    appendItem(document.getElementById(`act-${product.product_id}`), product.qty);
+                });
+            }
+
+            isCartInitialized = true;
+        }
     </script>   
 @endpush

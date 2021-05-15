@@ -7,11 +7,11 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <span>Jumlah Barang : </span>
-                    <span class="badge badge-primary badge-pill"><strong>0</strong></span>
+                    <span class="badge badge-primary badge-pill"><strong><span id="jumlah-barang">@if(isset($value)){{$value['itemsCount'] ?? 0}}@else{{0}}@endif</span></strong></span>
                 </li>
                 <li class="list-group-item">
                     <span>Subtotal Keranjang : </span>
-                    <span><strong>Rp. 0</strong></span>
+                    <span><strong>Rp. <span id="subtotal-keranjang">@if(isset($value)){{number_format($value['subtotal']) ?? 0}}@else{{0}}@endif</span></strong></span>
                 <li>
             </ul>
             @endif

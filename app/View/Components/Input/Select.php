@@ -6,13 +6,13 @@ use Illuminate\View\Component;
 
 class Select extends Component
 {
-    public $width, $slug, $title, $defaultOption, $options, $isEmployee, $disabled;
+    public $width, $slug, $title, $defaultOption, $options, $isEmployee, $disabled, $value;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($width, $slug, $title, $defaultOption, $options, $isEmployee = false, $disabled = false)
+    public function __construct($width, $slug, $title, $defaultOption, $options, $isEmployee = false, $disabled = false, $value = NULL)
     {
         $this->width = $width;
         $this->slug = $slug;
@@ -21,6 +21,7 @@ class Select extends Component
         $this->options = $options;
         $this->isEmployee = $isEmployee;
         $this->disabled = $disabled;
+        $this->value = $value;
     }
 
     /**

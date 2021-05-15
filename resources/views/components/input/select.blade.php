@@ -3,7 +3,7 @@
     <select class="form-control" name="{{$slug}}" id="{{$slug}}" {{$disabled ? __('disabled') : ''}}>
         <option value="NULL">{{$defaultOption}}</option>
         @foreach ($options as $option)
-            <option value="{{$option['value'] ?? $option['id']}}">
+            <option value="{{$option['value'] ?? $option['id']}}" @if(( isset($value) ) && $option['id'] == $value) {{__('selected')}} @endif >
                 @if ($isEmployee)
                     {{$option['first_name'].' '.$option['last_name']}}                   
                 @else

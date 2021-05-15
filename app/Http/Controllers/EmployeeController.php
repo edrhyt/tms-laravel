@@ -125,8 +125,6 @@ class EmployeeController extends Controller
             $newImageName = $employee->image;
         }
         
-        
-
         // Store
         $employee->update([
             'division_id' => $division,

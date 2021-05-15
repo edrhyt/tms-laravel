@@ -1,8 +1,10 @@
 //Global Variables
-let itemsCount = 0;
-let subTotalPrice = 0;
-let totalPrice = 0;
-let diskonDP = parseInt( $('#diskon-dp').val() ) || 0;
+let itemsCount = parseInt($('#jumlah-barang').text()) > 0 ? parseInt($('#jumlah-barang').text()) : 0;
+let subTotalPrice = parseInt($('#subtotal-keranjang').text()) > 0 ? parseInt($('#subtotal-keranjang').text().match(/\d+/g).join('')) : 0;
+let totalPrice = parseInt($('#total-angsuran').val()) > 0 ? parseInt($('#total-angsuran').val()) : 0;
+let diskonDP = parseInt( $('#diskon-dp').val() ) ? parseInt($('#diskon-dp').val()) : 0;
+let isEdit = $('#isEdit').val() ?? false;
+let isCartInitialized = false;
 
 let diskonKoordinator = parseInt( $('#diskon-koordinator').val() ) || 0;
 

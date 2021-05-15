@@ -6,20 +6,21 @@ use Illuminate\View\Component;
 
 class Card extends Component
 {
-    public $width, $slug, $title, $options, $info; 
+    public $width, $slug, $title, $options, $info, $value; 
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($width, $slug, $title, $options = array(), $info = '')
+    public function __construct($width, $slug, $title, $options = array(), $info = '', $value = NULL)
     {
         $this->width = $width;
         $this->slug = $slug;
         $this->title = $title;
         $this->options = $options;
         $this->info = $info;
+        $this->value = $value;
     }
 
     /**

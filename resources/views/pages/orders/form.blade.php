@@ -3,15 +3,18 @@
       @if (session('status') != NULL)
           {{-- <x-alert></x-alert> --}}
       @endif
-        <form class="form-horizontal" method="POST">
+        <form class="form-horizontal" method="POST" action="@if(isset($order)){{route('order.update', $order->id)}}@else{{route('order.store')}}@endif">
             @isset($order)
                 @method('PUT')
             @endisset
 
             @csrf
             <fieldset>
+                @isset($order)
+                <input type="hidden" id="isEdit" name="isEdit" value="TRUE">
+                @endisset
                 <div class="d-flex justify-content-between align-items-center py-2" id="form-head">
-                  <strong class="text-xl">Tambah Data Surat Order</strong>
+                  <strong class="text-xl">{{isset($order) ? __('Ubah') : __('Tambah')}} Data Surat Order</strong>
                   <div class="col-md-6 d-flex align-items-center justify-content-end pr-0">
                     <input class="form-control input-group-text col-md-3 text-center" style="border-radius: 99px 0 0 99px;" type="text" value="BDG" name="kode-wilayah" id="kode-wilayah" readonly> 
                     <input class="form-control col-md-6" style="border-radius: 0 99px 99px 0;" type="text" placeholder="No Surat Order" name="no-so" id="no-so" @isset($order) value="{{substr($order->number, 4)}}" @endisset required>
@@ -23,14 +26,15 @@
                       width="col-md-4" 
                       slug="order-date" 
                       title="Tanggal Surat Order"
+                      color="btn-primary"
                       :value="$order->date ?? NULL"
-                      :disabled="isset($order) ? TRUE : FALSE" />
+                      :disabled="FALSE" />
 
                     <x-input.date 
                       width="col-md-4" 
                       slug="survey-date" 
-                      color="btn-primary"
-                      title="Tanggal Survey" />
+                      title="Tanggal Survey"
+                      :disabled="TRUE" />
 
                     <x-input.date 
                       width="col-md-4" 
@@ -44,28 +48,31 @@
                       width="col-md-12" 
                       slug="coordinator-name" 
                       title="Nama Koordinator"
-                      :value="$order->coordinator_name ?? NULL" />
+                      :value="isset($order) ? $order->coordinator_name : NULL" />
                     
                     <x-input.select
                       width="col-md-4"
                       slug="regency"
                       title="Kabupaten/Kota"
                       defaultOption="Pilih Kabupaten/Kota"
-                      :options="$regencies" />
+                      :options="$regencies"
+                      :value="isset($order) ? $order->regency_id : NULL" />
 
                     <x-input.select
                       width="col-md-4"
                       slug="subdistrict"
                       title="Kecamatan"
                       defaultOption="Pilih Kecamatan"
-                      :options="array()" />
+                      :options="$subdistricts ?? array()" 
+                      :value="isset($order) ? $order->subdistrict_id : NULL"/>
 
                     <x-input.select
                       width="col-md-4"
                       slug="village"
                       title="Kelurahan/Desa"
                       defaultOption="Pilih Kelurahan/Desa"
-                      :options="array()" />
+                      :options="$villages ?? array()" 
+                      :value="isset($order) ? $order->village_id : NULL" />
                     
                 </div>
 
@@ -74,17 +81,20 @@
                       width="col-md-6" 
                       slug="address" 
                       title="Alamat" 
+                      :value="$order->address ?? NULL"
                       :height="9" />
 
                     <x-container.card 
                       width="col-md-6" 
                       slug="cart" 
-                      title="Keranjang" />
+                      title="Keranjang"
+                      :value="['itemsCount' => count($products ?? array()), 'subtotal' => $order->total ?? 0]" />
 
                     <x-container.cart-modal 
                       width="col-md-10"
                       slug="cart"
                       title="Tambah Barang"
+                      :value="$products ?? NULL"
                       :dataTable="$dataTable" />
 
                 </div>
@@ -96,14 +106,15 @@
                     title="Angsuran"
                     defaultOption="Pilih Angsuran"
                     :options="$list_angsuran"
-                    :disabled="true"
-                  />
-                  
+                    :disabled="isset($order) ? FALSE : TRUE"
+                    :value="$order->installments_tenor ?? NULL" />
+
                   <x-input.text 
                     width="col-md-6" 
                     slug="diskon-dp" 
                     title="Diskon DP"
-                    :disabled="true" />
+                    :value="$order->dp_discount ?? NULL"
+                    :disabled="isset($order) ? FALSE : TRUE" />
 
                   {{-- <x-input.dropdown 
                     width="col-md-4" 
@@ -118,12 +129,14 @@
                     width="col-md-6" 
                     slug="total-angsuran" 
                     title="Total Angsuran" 
+                    :value="$order->total ?? NULL"
                     :disabled="true" />
 
                   <x-input.text 
                     width="col-md-6" 
                     slug="netto" 
                     title="Netto" 
+                    :value="$order->netto ?? NULL"
                     :disabled="true" />
 
                 </div>
@@ -133,12 +146,14 @@
                     width="col-md-6" 
                     slug="angsuran-1" 
                     title="Angsuran 1" 
+                    :value="$order->first_installment ?? NULL"
                     :disabled="true" />
 
                   <x-input.text 
                     width="col-md-6" 
                     slug="angsuran-per-bulan" 
                     title="Angsuran / Bulan" 
+                    :value="$order->monthly_installments ?? NULL"
                     :disabled="true" />
 
                 </div>
@@ -149,6 +164,7 @@
                     slug="sales-promotor"
                     title="Sales Promotor"
                     defaultOption="Pilih Sales Promotor"
+                    :value="$order->sp_employee_id ?? NULL"
                     :isEmployee="true"
                     :options="$promotors" />
 
@@ -157,6 +173,7 @@
                     slug="demo-booker"
                     title="Demo Booker"
                     defaultOption="Pilih Demo Booker"
+                    :value="$order->db_employee_id ?? NULL"
                     :isEmployee="true"
                     :options="$demo_bookers" />
 
@@ -165,13 +182,14 @@
                     slug="svp-sales"
                     title="SVP Sales"
                     defaultOption="Pilih SVP Sales"
+                    :value="$order->ss_employee_id ?? NULL"
                     :isEmployee="true"
                     :options="$svp_sales" />
 
                 </div>
                   
                 <div class="form-row">
-                  <input type="submit" class="btn btn-primary col-md-12" name="submit" style="margin: 0 5px;">
+                  <input type="submit" class="btn btn-primary col-md-12" name="submit" style="margin: 0 5px;" value="@if(isset($order)){{__('Update')}}@else{{__('Submit')}}@endif">
                 </div>
            </fieldset>
         </form>
@@ -214,7 +232,7 @@
     <script>
       $('#regency').on('change', () => {
         regency_id = $('#regency').val();
-        $.ajax(`tambah/kecamatan/${regency_id}`, 
+        $.ajax(`/penjualan/surat-order/tambah/kecamatan/${regency_id}`, 
         {
             dataType: 'json', // type of response data
             timeout: 500,     // timeout milliseconds
@@ -224,7 +242,7 @@
               data.forEach(kec => {
                 options += `
                   <option value="${kec.id}">
-                    Kec. ${kec.name}
+                    ${kec.name}
                   </option>`;
               });
 
@@ -243,7 +261,7 @@
 
       $('#subdistrict').on('change', () => {
         subdistrict_id = $('#subdistrict').val();
-        $.ajax(`tambah/desa/${subdistrict_id}`, 
+        $.ajax(`/penjualan/surat-order/tambah/desa/${subdistrict_id}`, 
         {
             dataType: 'json', // type of response data
             timeout: 500,     // timeout milliseconds
@@ -253,7 +271,7 @@
               data.forEach(des => {
                 options += `
                   <option value="${des.id}">
-                    Kel/Des. ${des.name}
+                    ${des.name}
                   </option>`;
               });
 
