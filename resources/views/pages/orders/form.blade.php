@@ -88,7 +88,7 @@
                       width="col-md-6" 
                       slug="cart" 
                       title="Keranjang"
-                      :value="['itemsCount' => count($products ?? array()), 'subtotal' => $order->total ?? 0]" />
+                      :value="['itemsCount' => $all_qty ?? 0, 'subtotal' => $order->total ?? 0]" />
 
                     <x-container.cart-modal 
                       width="col-md-10"
@@ -187,7 +187,11 @@
                     :options="$svp_sales" />
 
                 </div>
-                  
+                
+                @isset($order)
+                  <input type="hidden" name="cartChanges" id="cartChanges" value="0">
+                @endisset
+
                 <div class="form-row">
                   <input type="submit" class="btn btn-primary col-md-12" name="submit" style="margin: 0 5px;" value="@if(isset($order)){{__('Update')}}@else{{__('Submit')}}@endif">
                 </div>
@@ -230,7 +234,15 @@
     </script>
 
     <script>
-      $('#regency').on('change', () => {
+      $('#regency').on('change keyup', async function() {
+        await getKecamatanList();
+      });
+      
+      $('#subdistrict').on('change keyup', async () => {
+        await getDesaList();
+      });
+
+      function getKecamatanList() {
         regency_id = $('#regency').val();
         $.ajax(`/penjualan/surat-order/tambah/kecamatan/${regency_id}`, 
         {
@@ -252,14 +264,15 @@
               
               $('#subdistrict').html('');
               $('#subdistrict').append(options);
+              $('#subdistrict').trigger('change');
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback 
                 alert('Error: ' + errorMessage);
             }
         });
-      });
-
-      $('#subdistrict').on('change', () => {
+      }
+      
+      function getDesaList() {
         subdistrict_id = $('#subdistrict').val();
         $.ajax(`/penjualan/surat-order/tambah/desa/${subdistrict_id}`, 
         {
@@ -282,6 +295,6 @@
                 alert('Error: ' + errorMessage);
             }
         });
-      });
+      }
     </script>
 @endpush

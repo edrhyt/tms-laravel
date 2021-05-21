@@ -69,7 +69,7 @@ function addItem(btn) {
     });
 }
 
-function appendItem(btn, val) {
+function appendItem(btn, qty) {
     if($(btn).attr('disabled') != 'disabled') {
         $(btn).attr('disabled', '');
         if($('#empty-list').css('display') != 'none'){
@@ -93,10 +93,10 @@ function appendItem(btn, val) {
                     ${itemName}
                     <div class="d-flex justify-content-between align-items-center mt-2">
                         <label for="qty-${itemId}" class="control-label m-0" style="flex: 1;">Kuantitas</label>
-                        <input type="number" name="qty-${itemId}" id="qty-${itemId}" class="form-control text-xs item-qty" style="max-height: 2rem; max-width: 4rem; border: none !important; color: #555; background: #f5f5f5; flex: 1;" value="${val}" min="1" max="${itemStock}">
+                        <input type="number" name="qty-${itemId}" id="qty-${itemId}" class="form-control text-xs item-qty" style="max-height: 2rem; max-width: 4rem; border: none !important; color: #555; background: #f5f5f5; flex: 1;" value="${qty}" min="1" max="${itemStock}">
                         <h5 class="text-right item-price" style="flex: 2;">
                             <span>Rp.</span> 
-                            <span id="price-${itemId}">${numberWithCommas( itemPrice )}</span>
+                            <span id="price-${itemId}">${numberWithCommas( itemPrice*qty )}</span>
                         </h5>
                     </div>
                 </div>
@@ -110,7 +110,7 @@ function appendItem(btn, val) {
         //Listeners for action
         // # Update qty action
         $(`#qty-${itemId}`).on('keyup change', function () {
-            let currentPrice = numberWithCommas(itemPrice*parseInt($(btn).val()));
+            let currentPrice = numberWithCommas(itemPrice*parseInt($(this).val()));
             $(`#price-${itemId}`).text(currentPrice);
             updateSubTotalPrice();
             updateItemsCount();

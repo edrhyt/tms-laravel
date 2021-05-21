@@ -97,6 +97,11 @@ class OrderLetterController extends Controller
         $demo_bookers = Employee::getDemoBooker()->toArray(); 
         $spv_sales = Employee::getSVPSales()->toArray(); 
         $products = $products = self::getProductList($order->id);
+        $all_qty = 0;
+
+        foreach($products as $key => $product) {
+            $all_qty += $product['value']['qty'];
+        }
 
         return $dataTable->render('pages.orders.inputs', [
             'list_angsuran' => $list_angsuran,
@@ -109,6 +114,7 @@ class OrderLetterController extends Controller
             'svp_sales' => $spv_sales,
             'order' => $order,
             'products' => $products,
+            'all_qty' => $all_qty,
         ]);
     }
 
@@ -204,9 +210,10 @@ class OrderLetterController extends Controller
             'order-date' => 'required',
         ]);
 
+        $isCartChanged = request('cartChanges') == '1' ? TRUE : FALSE;
         
         // Mulai DB transaksi
-        DB::transaction(function() use ($order){
+        DB::transaction(function() use ($order, $isCartChanged){
             // Pre-process no surat order
             $noSuratOrder = request('kode-wilayah') .'-'. request('no-so');
 
@@ -244,17 +251,20 @@ class OrderLetterController extends Controller
                 'date' => date("Y-m-d", strtotime(request('order-date'))),
             ]);
 
-            // Clear semua list barang dengan id surat order ini
-            $deletedProductList = OrderLetterProducts::where('order_letter_id', $order->id)
+            if($isCartChanged) {
+
+                // Clear semua list barang dengan id surat order ini
+                $deletedProductList = OrderLetterProducts::where('order_letter_id', $order->id)
                                                         ->delete();
     
-            // Insert data baru ke pivot table order_letter_products
-            foreach($listBarang as $barang) {
-                OrderLetterProducts::create([
-                    'order_letter_id' => $order->id,
-                    'product_id' => $barang['product-id'],
-                    'quantity' => $barang['quantity']
-                ]);
+                // Insert data baru ke pivot table order_letter_products
+                foreach($listBarang as $barang) {
+                    OrderLetterProducts::create([
+                        'order_letter_id' => $order->id,
+                        'product_id' => $barang['product-id'],
+                        'quantity' => $barang['quantity']
+                    ]);
+                }
             }
 
         });
@@ -297,6 +307,7 @@ class OrderLetterController extends Controller
         $productList = (object) $productList;
 
         $products = array();        
+
         foreach($productList as $idx => $product) {
             $products[$idx]['title'] = $product->product_name;
             $products[$idx]['value']['product_id'] = $product->product_id;

@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class Colsidenav extends Component
+class Colsidenavs extends Component
 {
     public $parent_menu;
 

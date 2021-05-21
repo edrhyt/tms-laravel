@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class Colsidenav extends Component
+class Colsidemenu extends Component
 {
     public String $icon;
     public Array $parent;
@@ -24,6 +24,6 @@ class Colsidenav extends Component
      */
     public function render()
     {
-        return view('components.colsidenav');
+        return view('components.colsidemenu');
     }
 }

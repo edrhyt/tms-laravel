@@ -86,6 +86,7 @@
             }
 
             isCartInitialized = true;
+            $('#cartChanges').val('1');
         }
     </script>   
 @endpush
