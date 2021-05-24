@@ -78,6 +78,10 @@ Route::group(['middleware' => 'auth'], function () {
 		'as' => 'order.desa', 
 		'uses' => 'App\Http\Controllers\OrderLetterController@getDesa'
 	]);
+	Route::get('penjualan/surat-order/survey/{order}', [
+		'as' => 'order.survey', 
+		'uses' => 'App\Http\Controllers\OrderLetterController@makeSurvey'
+	]);
 	
 	// Sale # POST, PUT, DELETE
 	Route::post('penjualan/surat-order/tambah', ['as' => 'order.store', 'uses' => 'App\Http\Controllers\OrderLetterController@store']);

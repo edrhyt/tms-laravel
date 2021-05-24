@@ -41,7 +41,7 @@ class OrderLetterDataTable extends DataTable
                                 <a class="dropdown-item text-danger" href="#"><i class="far fa-trash-alt"></i>Hapus</a>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary bt-small"><i class="far fa-file"></i> Buat Survey</button>
+                        <a href="'.route('order.survey', $orderLetter->id).'"><button type="button" class="btn btn-primary bt-small"><i class="far fa-file"></i> Buat Survey</button></a>
                     </div>';
             })
             ->rawColumns(['id']);

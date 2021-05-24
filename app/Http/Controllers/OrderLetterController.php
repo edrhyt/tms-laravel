@@ -96,7 +96,7 @@ class OrderLetterController extends Controller
         $promotors = Employee::getSalesPromotor()->toArray(); 
         $demo_bookers = Employee::getDemoBooker()->toArray(); 
         $spv_sales = Employee::getSVPSales()->toArray(); 
-        $products = $products = self::getProductList($order->id);
+        $products = self::getProductList($order->id);
         $all_qty = 0;
 
         foreach($products as $key => $product) {
@@ -268,6 +268,56 @@ class OrderLetterController extends Controller
             }
 
         });
+    }
+
+    public function makeSurvey(OrderLetter $order) {
+        // Breadcrumb
+        $breadcrumb = array(
+            [
+                'title' => 'Penjualan',
+                'route' => route('order'),
+            ],
+            [
+                'title' => 'Surat Order',
+                'route' => route('order'),
+            ],
+            [
+                'title' => 'Survey - '.$order->number,
+                'route' => route('order.survey', $order->id),
+            ]
+        );
+
+        // Options
+        $survey = TRUE;
+        $list_angsuran = self::getListAngsuran();
+        $regencies = Regency::all()->toArray();
+        $subdistricts = Subdistrict::getKecamatan($order->regency_id)->toArray();
+        $villages = Village::getDesa($order->subdistrict_id)->toArray();
+
+        // Data Modeling
+        $promotors = Employee::getSalesPromotor()->toArray(); 
+        $demo_bookers = Employee::getDemoBooker()->toArray(); 
+        $spv_sales = Employee::getSVPSales()->toArray(); 
+        $products = self::getProductList($order->id);
+        $all_qty = 0;
+
+        foreach($products as $key => $product) {
+            $all_qty += $product['value']['qty'];
+        }
+
+        return view('pages.orders.survey', [
+            'breadcrumb' => $breadcrumb,
+            'order' => $order,
+            'list_angsuran' => $list_angsuran,
+            'regencies' => $regencies,
+            'subdistricts' => $subdistricts,
+            'villages' => $villages,
+            'promotors' => $promotors,
+            'demo_bookers' => $demo_bookers,
+            'svp_sales' => $spv_sales,
+            'products' => $products,
+            'all_qty' => $all_qty,
+        ]);
     }
 
     protected function getListAngsuran() {
