@@ -6,6 +6,7 @@
         <form class="form-horizontal" method="POST" action="@if(isset($order)){{route('order.update', $order->id)}}@else{{route('order.store')}}@endif">
             @isset($order)
                 @method('PUT')
+                <input type="hidden" name="update-type" value="update-so">
             @endisset
 
             @csrf

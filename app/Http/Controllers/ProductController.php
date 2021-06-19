@@ -19,7 +19,7 @@ class ProductController extends Controller
     }
 
     public function create() {
-
+        return view('pages.employees.inputs', ['positions' => array()]);
     }
 
     public function edit(Product $product) {

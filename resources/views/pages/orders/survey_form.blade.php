@@ -1,9 +1,10 @@
 <div class="container-fluid mt--7">
     <div class="container-light" style="transition: height 0.3s ease">
-      @if (session('status') != NULL)
-          {{-- <x-alert></x-alert> --}}
-      @endif
-        <form class="form-horizontal" method="POST" action="">
+        {{$errors->any ? $errors->first() : ''}}
+        <form class="form-horizontal" method="POST" action="{{route('order.update', $order->id)}}">
+            @method('PUT')
+            <input type="hidden" name="update-type" value="submit-survey">
+
             @csrf
             <fieldset>
                 <div class="d-flex justify-content-between align-items-center py-2" id="form-head">
@@ -35,6 +36,14 @@
                       slug="delivery-date" 
                       title="Tanggal Delivery"
                       :disabled="TRUE" />
+                </div>
+
+                <div class="form-row">
+                    <x-input.text 
+                      width="col-md-12" 
+                      slug="coordinator-name" 
+                      title="Nama Koordinator"
+                      :value="isset($order) ? $order->coordinator_name : NULL" />
                 </div>
 
                 <div class="form-row">
@@ -81,10 +90,40 @@
 
                     <x-container.card 
                       width="col-md-6" 
-                      slug="cart" 
-                      title="Keranjang"
-                      :value="['itemsCount' => $all_qty ?? 0, 'subtotal' => $order->total ?? 0]" />
+                      slug="products" 
+                      title="List Barang"
+                      :value="['listBarang' => $products, 'allQty' => $all_qty, 'order' => $order]" />
 
+                </div>
+
+                <div class="form-row">
+                    <x-input.select
+                      width="col-md-4"
+                      slug="due-date"
+                      title="Tanggal Jatuh Tempo"
+                      defaultOption="Pilih Tanggal"
+                      :options="30" 
+                      :value="NULL" />
+
+                    <x-input.text 
+                      width="col-md-4" 
+                      slug="phone" 
+                      title="Nomor Telepon"
+                      :value="NULL" />
+
+                    <x-input.select
+                      width="col-md-4"
+                      slug="surveyor"
+                      title="Surveyor"
+                      defaultOption="Pilih Surveyor"
+                      :options="$surveyors ?? array()" 
+                      :value="NULL" 
+                      :isEmployee="TRUE" />
+
+                </div>
+
+                <div class="form-row">
+                  <input type="submit" class="btn btn-primary col-md-12" name="submit" style="margin: 0 5px;" value="Buat Survey">
                 </div>
             </fieldset>
             

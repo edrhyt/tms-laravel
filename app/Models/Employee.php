@@ -45,6 +45,12 @@ class Employee extends Model
                     ->get();
     }
 
+    public static function getSurveyor() {
+        return self::where('position_id', 9)
+                    ->orderBy('first_name')
+                    ->get();
+    }
+
     public static function getEmployeeName($id) {
         $employee = self::where('id', $id)
                     ->orderBy('first_name')

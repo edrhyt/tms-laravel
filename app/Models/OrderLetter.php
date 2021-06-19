@@ -35,6 +35,8 @@ class OrderLetter extends Model
         'survey_date',
         'delivery_date',
         'due_date',
+        'customers',
+        'survey_status',
         'phone',
     ];
 }

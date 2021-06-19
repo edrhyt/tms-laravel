@@ -169,3 +169,9 @@ html {
     margin-left: 25px;
     color: rgba($color: #fff, $alpha: 0.75);
 }
+
+.alert.auto-close {
+    position: absolute !important;
+    width: 95% !important;
+    z-index: 9999;
+}

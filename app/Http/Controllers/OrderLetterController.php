@@ -191,83 +191,152 @@ class OrderLetterController extends Controller
     }
 
     public function update(OrderLetter $order) {
-        // Validasi
-        request()->validate([
-            'kode-wilayah' => 'required',
-            'no-so' => 'required',
-            'subdistrict' => 'required',
-            'regency' => 'required',
-            'village' => 'required',
-            'sales-promotor' => 'required',
-            'demo-booker' => 'required',
-            'svp-sales' => 'required',
-            'coordinator-name' => 'required',
-            'address' => 'required',
-            'installment' => 'required',
-            'diskon-dp' => 'required',
-            'angsuran-1' => 'required',
-            'angsuran-per-bulan' => 'required',
-            'order-date' => 'required',
-        ]);
+        switch(request('update-type')) {
+            case 'update-so':
+                // Validasi
+                request()->validate([
+                    'kode-wilayah' => 'required',
+                    'no-so' => 'required',
+                    'subdistrict' => 'required',
+                    'regency' => 'required',
+                    'village' => 'required',
+                    'sales-promotor' => 'required',
+                    'demo-booker' => 'required',
+                    'svp-sales' => 'required',
+                    'coordinator-name' => 'required',
+                    'address' => 'required',
+                    'installment' => 'required',
+                    'diskon-dp' => 'required',
+                    'angsuran-1' => 'required',
+                    'angsuran-per-bulan' => 'required',
+                    'order-date' => 'required',
+                ]);
 
-        $isCartChanged = request('cartChanges') == '1' ? TRUE : FALSE;
+                $isCartChanged = request('cartChanges') == '1' ? TRUE : FALSE;
+                
+                // Mulai DB transaksi
+                DB::transaction(function() use ($order, $isCartChanged){
+                    // Pre-process no surat order
+                    $noSuratOrder = request('kode-wilayah') .'-'. request('no-so');
+
+                    // Pre-process list barang
+                    $requestKeys = request()->except('_token');
+                    $listBarang = [];
+
+                    foreach($requestKeys as $key => $qty) {
+                        if(preg_match("/^qty-([0-9][0-9][0-9]|[0-9][0-9]|[0-9])$/", $key)) {
+                            array_push($listBarang, [
+                                'product-id' => (int) explode("-", $key)[1],
+                                'quantity' => (int) $qty,
+                            ]);
+                        }
+                    }
+
+                    // Insert data baru ke order_letter
+                    $orderLetter = $order->update([
+                        'number' => $noSuratOrder,
+                        'province_id' => 32,
+                        'regency_id' => request('regency'),
+                        'subdistrict_id' => request('subdistrict'),
+                        'village_id' => request('village'),
+                        'sp_employee_id' => request('sales-promotor'),
+                        'db_employee_id' => request('demo-booker'),
+                        'ss_employee_id' => request('svp-sales'),
+                        'coordinator_name' => request('coordinator-name'),
+                        'address' => request('address'),
+                        'installments_tenor' => request('installment'),
+                        'dp_discount' => request('diskon-dp'),
+                        'total' => request('total-angsuran'),
+                        'netto' => request('netto'),
+                        'first_installment' => request('angsuran-1'),
+                        'monthly_installments' => request('angsuran-per-bulan'),
+                        'date' => date("Y-m-d", strtotime(request('order-date'))),
+                    ]);
+
+                    if($isCartChanged) {
+
+                        // Clear semua list barang dengan id surat order ini
+                        $deletedProductList = OrderLetterProducts::where('order_letter_id', $order->id)
+                                                                ->delete();
+            
+                        // Insert data baru ke pivot table order_letter_products
+                        foreach($listBarang as $barang) {
+                            OrderLetterProducts::create([
+                                'order_letter_id' => $order->id,
+                                'product_id' => $barang['product-id'],
+                                'quantity' => $barang['quantity']
+                            ]);
+                        }
+                    }
+
+                });
+                break;
+            
+            case 'submit-survey':
+                // Validasi
+                request()->validate([
+                    'survey-date' => 'required',
+                    'coordinator-name' => 'required',
+                    'konsumen-1' => 'required',
+                    'address' => 'required',
+                    'phone' => 'required',
+                    'due-date' => 'required',
+                    'surveyor' => 'required',
+                ]);
+
+                // Mulai DB transaksi
+                try {
+                    DB::transaction(function() use ($order){
+                        // Pre-process
+                        $noSuratOrder = request('kode-wilayah') .'-'. request('no-so');
+                        $customers = '';
+                        $arrayCustomers = request()->except(
+                            '_token',
+                            '_method',
+                            'update-type',
+                            'due-date',
+                            'survey-date',
+                            'delivery-date',
+                            'phone',
+                            'surveyor',
+                            'submit',
+                            'order-date',
+                            'kode-wilayah',
+                            'no-so',
+                            'subdistrict',
+                            'regency',
+                            'village',
+                            'coordinator-name',
+                            'address',
+                        );
+
+                        foreach ($arrayCustomers as $key => $value) {
+                            if(count($arrayCustomers) > 1) {
+                                $key == array_key_last($arrayCustomers) ? $customers .= $value : $customers .= $value . '%';
+                            } else {
+                                $customers = $value;
+                            }
+                        }
+
+                        // Insert data baru ke order_letter
+                        $orderLetter = $order->update([
+                            'survey_date' => request('survey-date'),
+                            'due_date' => request('due-date'),
+                            'phone' => request('phone'),
+                            'surveyor_id' => request('surveyor'),
+                            'survey_status' => 0,
+                            'customers' => $customers,
+                        ]);
+
+                    });
+                    return redirect()->route('order')->with('success', 'Data survey berhasil dibuat.');  
+                } catch (\Throwable $th) {
+                    return redirect()->back()->withErrors(['msg', 'Terjadi kesalahan, silahkan coba lagi.']);
+                }
+                
+                break;
+        }
         
-        // Mulai DB transaksi
-        DB::transaction(function() use ($order, $isCartChanged){
-            // Pre-process no surat order
-            $noSuratOrder = request('kode-wilayah') .'-'. request('no-so');
-
-            // Pre-process list barang
-            $requestKeys = request()->except('_token');
-            $listBarang = [];
-
-            foreach($requestKeys as $key => $qty) {
-                if(preg_match("/^qty-([0-9][0-9][0-9]|[0-9][0-9]|[0-9])$/", $key)) {
-                    array_push($listBarang, [
-                        'product-id' => (int) explode("-", $key)[1],
-                        'quantity' => (int) $qty,
-                    ]);
-                }
-            }
-
-            // Insert data baru ke order_letter
-            $orderLetter = $order->update([
-                'number' => $noSuratOrder,
-                'province_id' => 32,
-                'regency_id' => request('regency'),
-                'subdistrict_id' => request('subdistrict'),
-                'village_id' => request('village'),
-                'sp_employee_id' => request('sales-promotor'),
-                'db_employee_id' => request('demo-booker'),
-                'ss_employee_id' => request('svp-sales'),
-                'coordinator_name' => request('coordinator-name'),
-                'address' => request('address'),
-                'installments_tenor' => request('installment'),
-                'dp_discount' => request('diskon-dp'),
-                'total' => request('total-angsuran'),
-                'netto' => request('netto'),
-                'first_installment' => request('angsuran-1'),
-                'monthly_installments' => request('angsuran-per-bulan'),
-                'date' => date("Y-m-d", strtotime(request('order-date'))),
-            ]);
-
-            if($isCartChanged) {
-
-                // Clear semua list barang dengan id surat order ini
-                $deletedProductList = OrderLetterProducts::where('order_letter_id', $order->id)
-                                                        ->delete();
-    
-                // Insert data baru ke pivot table order_letter_products
-                foreach($listBarang as $barang) {
-                    OrderLetterProducts::create([
-                        'order_letter_id' => $order->id,
-                        'product_id' => $barang['product-id'],
-                        'quantity' => $barang['quantity']
-                    ]);
-                }
-            }
-
-        });
     }
 
     public function makeSurvey(OrderLetter $order) {
@@ -298,8 +367,12 @@ class OrderLetterController extends Controller
         $promotors = Employee::getSalesPromotor()->toArray(); 
         $demo_bookers = Employee::getDemoBooker()->toArray(); 
         $spv_sales = Employee::getSVPSales()->toArray(); 
+        $surveyors = Employee::getSurveyor()->toArray(); 
         $products = self::getProductList($order->id);
         $all_qty = 0;
+
+        // Links
+        $referer = request()->headers->get('referer');
 
         foreach($products as $key => $product) {
             $all_qty += $product['value']['qty'];
@@ -315,12 +388,14 @@ class OrderLetterController extends Controller
             'promotors' => $promotors,
             'demo_bookers' => $demo_bookers,
             'svp_sales' => $spv_sales,
+            'surveyors' => $surveyors,
             'products' => $products,
             'all_qty' => $all_qty,
+            'referer' => $referer,
         ]);
     }
 
-    protected function getListAngsuran() {
+    protected static function getListAngsuran() {
         return array(
             ['id' => '5', 'title' => '5 Bulan'],
             ['id' => '6', 'title' => '6 Bulan'],
@@ -331,7 +406,7 @@ class OrderLetterController extends Controller
         );
     }
 
-    protected function getOpsi() {
+    protected static function getOpsi() {
         return array(
             [
                 'slug' => 'hadiah',
@@ -346,7 +421,7 @@ class OrderLetterController extends Controller
         );
     }
 
-    protected function getProductList(int $order_id) {
+    protected static function getProductList(int $order_id) {
         // Set list barang
         $productList = OrderLetterProducts::where('order_letter_id', $order_id)
                                             ->orderBy('product_id')
